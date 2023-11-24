@@ -1,0 +1,60 @@
+import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import React, {useState, useEffect} from 'react';
+
+const genderArray = [
+  {
+    key: 'male',
+    title: 'Male',
+  },
+  {key: 'female', title: 'Female'},
+];
+
+export default function GenderSelect(props) {
+  const [selectedGender, setSelectedGender] = useState(null);
+
+  useEffect(() => {
+    setSelectedGender(props?.value);
+  }, [props?.value]);
+
+  let selectedCellStyle;
+
+  selectedCellStyle = {...styles.cell, ...styles.selectedCell};
+
+  return (
+    <View style={styles.container}>
+      {genderArray.map(thisEl => {
+        return (
+          <TouchableOpacity
+            onPress={() => {
+              setSelectedGender(thisEl.key);
+
+              if (props.onValueSelected) {
+                props.onValueSelected(thisEl.key);
+              }
+            }}
+            style={
+              selectedGender === thisEl.key ? selectedCellStyle : styles.cell
+            }>
+            <Text>{thisEl.title}</Text>
+          </TouchableOpacity>
+        );
+      })}
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginHorizontal: 5,
+  },
+  selectedCell: {backgroundColor: 'pink'},
+  cell: {
+    flex: 1,
+    borderWidth: 1,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
